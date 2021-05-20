@@ -1,19 +1,21 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Home from '../views/Home.vue';
+import PhotoList from '../views/PhotoList.vue';
+import PhotoCard from '../views/PhotoCard.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home,
+    name: 'list',
+    component: PhotoList,
   },
   {
-    path: '/about',
-    name: 'About',
-    component: () => import('../views/About.vue'),
+    path: '/photo/:id',
+    name: 'card',
+    component: PhotoCard,
+    props: true,
   },
 ];
 
