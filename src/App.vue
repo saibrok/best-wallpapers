@@ -1,10 +1,13 @@
 <template>
   <div id="app">
-    <header class="header">
-      <router-link :to="{ name: 'list' }">Фотолист</router-link>
-    </header>
     <router-view />
   </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style lang="scss">
+#app {
+  width: 100%;
+  min-height: 100vh;
+  padding: 2rem 2rem 0;
+}
+</style>

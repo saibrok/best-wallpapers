@@ -1,21 +1,26 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import PhotoList from '../views/PhotoList.vue';
-import PhotoCard from '../views/PhotoCard.vue';
+import PhotoShow from '../views/PhotoShow.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/',
+    path: '/page/:number',
     name: 'list',
     component: PhotoList,
+    props: true,
   },
   {
     path: '/photo/:id',
     name: 'card',
-    component: PhotoCard,
+    component: PhotoShow,
     props: true,
+  },
+  {
+    path: '/',
+    redirect: { name: 'list', params: { number: 1 } },
   },
 ];
 
