@@ -14,6 +14,7 @@
         class="card__preview"
         :class="{ 'full-screen': isOpen }"
         @click="toggleFullScreen"
+        ref="preview"
       >
         <img
           class="card__preview-image"
@@ -101,16 +102,26 @@ export default {
   },
 
   methods: {
-    getLowQualityUrl(baseUrl) {
+    getLowQualityUrl(baseUrl, width, height) {
       const splitUrl = baseUrl.split('/');
 
       const widhtThumb = 800;
-      const heightThumb = 450;
+      const compressionRatio = width / widhtThumb;
+      const heightThumb = parseInt(height / compressionRatio);
 
       splitUrl[splitUrl.length - 2] = widhtThumb;
       splitUrl[splitUrl.length - 1] = heightThumb;
 
       return splitUrl.join('/');
+    },
+
+    setAspectRatio(width, height) {
+      console.log('width, height', width, height);
+      const aspectRatio = width / height;
+      console.log('aspectRatio', aspectRatio);
+      const newPadding = 100 / aspectRatio;
+      console.log('newPadding', newPadding);
+      this.$refs.preview.style.paddingTop = `${newPadding}%`;
     },
 
     toggleFullScreen() {
@@ -148,7 +159,10 @@ export default {
           this.photo = response.data;
           this.photo.lowQualityUrl = this.getLowQualityUrl(
             this.photo.download_url,
+            this.photo.width,
+            this.photo.height,
           );
+          this.setAspectRatio(this.photo.width, this.photo.height);
         })
         .catch((error) => {
           this.isError = true;
@@ -241,6 +255,7 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  text-align: center;
 }
 
 .link {
