@@ -4,7 +4,10 @@
       <router-link
         class="card__header-link link"
         title="Галерея фотографий"
-        :to="{ name: 'list', params: { number: prevPageNumber } }"
+        :to="{
+          name: 'list',
+          params: { number: !isNaN(prevPageNumber) ? prevPageNumber : 1 },
+        }"
       >
         Назад к Фотолист
       </router-link>
@@ -116,11 +119,8 @@ export default {
     },
 
     setAspectRatio(width, height) {
-      console.log('width, height', width, height);
       const aspectRatio = width / height;
-      console.log('aspectRatio', aspectRatio);
       const newPadding = 100 / aspectRatio;
-      console.log('newPadding', newPadding);
       this.$refs.preview.style.paddingTop = `${newPadding}%`;
     },
 
@@ -210,7 +210,7 @@ export default {
 }
 
 .card__description {
-  padding: 0 2rem 2rem 0;
+  margin-bottom: 2rem;
 }
 
 .card__author {
@@ -269,6 +269,7 @@ export default {
 
 .card__buttons {
   display: flex;
+  margin-bottom: 2rem;
 }
 
 .button {
