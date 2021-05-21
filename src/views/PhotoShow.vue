@@ -64,15 +64,19 @@
     </div>
     <div class="card__buttons">
       <button v-if="this.id > 0" class="button-prev button" @click="prevPage">
-        &lt; Предыдущая
+        &lt;&nbsp;Предыдущая
       </button>
       <button
         v-if="this.id < 1084"
         class="button-next button"
         @click="nextPage"
       >
-        Следующая &gt;
+        Следующая&nbsp;&gt;
       </button>
+    </div>
+    <div class="card__text">
+      <h3 class="card__text-title">{{ photo.title }}</h3>
+      <div class="card__text-description" v-html="photo.description"></div>
     </div>
   </div>
 </template>
@@ -80,6 +84,8 @@
 <script>
 import PhotoService from '@/services/PhotoService.js';
 import BaseLoader from '@/components/BaseLoader.vue';
+
+import axios from 'axios';
 
 export default {
   components: { BaseLoader },
@@ -130,7 +136,7 @@ export default {
 
     nextPage() {
       this.currentPhotoNumber = +this.id + 1;
-      this.$router.push({
+      this.$router.replace({
         name: 'card',
         params: {
           id: this.currentPhotoNumber,
@@ -141,7 +147,7 @@ export default {
 
     prevPage() {
       this.currentPhotoNumber = +this.id - 1;
-      this.$router.push({
+      this.$router.replace({
         name: 'card',
         params: {
           id: this.currentPhotoNumber,
@@ -163,6 +169,20 @@ export default {
             this.photo.height,
           );
           this.setAspectRatio(this.photo.width, this.photo.height);
+        })
+        .then(() => {
+          axios
+            .get('https://fish-text.ru/get?type=title&number=1&format=json')
+            .then((response) => {
+              this.photo.title = response.data.text;
+            });
+        })
+        .then(() => {
+          axios
+            .get('https://fish-text.ru/get?type=paragraph&number=3&format=html')
+            .then((response) => {
+              this.photo.description = response.data;
+            });
         })
         .catch((error) => {
           this.isError = true;
@@ -210,7 +230,7 @@ export default {
 }
 
 .card__description {
-  margin-bottom: 2rem;
+  margin: 2rem;
 }
 
 .card__author {
@@ -222,7 +242,6 @@ export default {
   position: relative;
   padding-top: 66.67%;
   overflow: hidden;
-  margin-bottom: 1rem;
   background-color: dimgray;
 }
 
@@ -236,6 +255,16 @@ export default {
   transform: translate(-50%, -50%);
   object-fit: cover;
   cursor: pointer;
+}
+
+.card__text {
+  margin-bottom: 2rem;
+  max-width: 1100px;
+}
+
+.card__text-title,
+.card__text-description {
+  margin-bottom: 0.5rem;
 }
 
 .card__preview-loader-wrapper {
