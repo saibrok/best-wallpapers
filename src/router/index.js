@@ -7,6 +7,11 @@ Vue.use(VueRouter);
 
 const routes = [
   {
+    path: '*',
+    name: 'catchAll',
+    component: PhotoList,
+  },
+  {
     path: '/page/:number',
     name: 'list',
     component: PhotoList,
